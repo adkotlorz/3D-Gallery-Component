@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { Reflector } from 'three/examples/jsm/Addons';
+
 import { images } from "./constants";
 
 const scene = new THREE.Scene();
@@ -27,20 +29,45 @@ for (let i = 0; i < count; i++) {
 
 	const baseNode = new THREE.Object3D();
 	baseNode.rotation.y = i * (2 * Math.PI / count);
-	rootNode.add( baseNode );
+	rootNode.add(baseNode);
+
+	const border = new THREE.Mesh(
+		new THREE.BoxGeometry(3.2, 2.2, 0.09),
+		new THREE.MeshStandardMaterial({color: 0X202020}),
+	);
+	border.position.z = -4
+	baseNode.add(border);
 
 	const artwork = new THREE.Mesh(
 		new THREE.BoxGeometry( 3, 2, 0.1 ),
-		new THREE.MeshBasicMaterial({ map: texture })
+		new THREE.MeshStandardMaterial({ map: texture })
 	);
 	artwork.position.z = -4;
-
 	baseNode.add(artwork);
 }
 
+const spotlight = new THREE.SpotLight(
+	0XFFFFFF,
+	100,
+	10,
+	0.65,
+	1,
+);
+spotlight.position.set(0, 5, 0);
+spotlight.target.position.set(0, 0.5, -5);
+scene.add(spotlight);
+scene.add(spotlight.target);
+
+const mirror = new Reflector(
+	new THREE.CircleGeometry(10),
+	{
+
+	}
+)
+
 function animate() {
 	rootNode.rotation.y += 0.002;
-	renderer.render( scene, camera );
+	renderer.render(scene, camera);
 }
 
 window.addEventListener('resize', () => {
