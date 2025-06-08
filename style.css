@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100&display=swap');
+
+body {
+  margin: 0;
+}
+
+h1,
+h2 {
+  color: #FFFFFF;
+  text-align: center;
+  width: 100%;
+
+  font-family: 'Inter', sans-serif;
+  font-weight: 100;
+
+  transition: opacity 0.5s ease-in-out;
+}
+
+#title {
+  position: fixed;
+  font-size: 6rem;
+  top: 0.5rem;
+}
+
+#artist {
+  position: fixed;
+  font-size: 3rem;
+  color: #808080FF;
+  top: 4rem;
+}

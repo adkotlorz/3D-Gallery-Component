@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { Reflector } from 'three/examples/jsm/Addons';
-
+import { Tween, Easing, update as updateTween } from 'tween';
 import { images } from "./constants";
+
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -61,6 +62,7 @@ for (let i = 0; i < count; i++) {
 		new THREE.MeshStandardMaterial({ map: leftArrowTexture, transparent: true }),
 	);
 	leftArrow.position.set(-1.8, 0, -4);
+	leftArrow.name = `LeftArrow`;
 
 	baseNode.add(leftArrow);
 
@@ -69,6 +71,7 @@ for (let i = 0; i < count; i++) {
 		new THREE.MeshStandardMaterial({ map: rightArrowTexture, transparent: true }),
 	);
 	rightArrow.position.set(1.8, 0, -4);
+	rightArrow.name = `RightArrow`;
 
 	baseNode.add(rightArrow);
 }
@@ -97,7 +100,17 @@ mirror.position.y = -1.1;
 mirror.rotateX(-Math.PI / 2);
 scene.add(mirror);
 
+function rotateGallery(direction) {
+	const deltaY = (direction * (2 * Math.PI / count));
+
+	new Tween(rootNode.rotation)
+		.to({ y: rootNode.rotation.y + deltaY })
+		.easing(Easing.Quadratic.InOut)
+		.start();
+}
+
 function animate() {
+	updateTween()
 	renderer.render(scene, camera);
 }
 
@@ -106,4 +119,24 @@ window.addEventListener('resize', () => {
 	camera.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	mirror.getRenderTarget().setSize( window.innerWidth, window.innerHeight );
+});
+
+window.addEventListener('click', (e) => {
+	const raycaster = new THREE.Raycaster();
+	const mouseNDC = new THREE.Vector2(
+		(e.clientX / window.innerWidth) * 2 - 1,
+		-(e.clientY / window.innerHeight) * 2 + 1
+	);
+
+	raycaster.setFromCamera(mouseNDC, camera);
+
+	const intersections = raycaster.intersectObject(rootNode, true);
+	if (intersections.length > 0) {
+		if (intersections[0].object.name === "LeftArrow") {
+			rotateGallery(-1)
+		}
+		if (intersections[0].object.name === "RightArrow") {
+			rotateGallery(1)
+		}
+	}
 });
