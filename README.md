@@ -63,7 +63,5 @@ To run the project locally, follow these steps:
 ├── main.js             # Main JavaScript file with Three.js logic
 ├── style.css           # CSS styles
 ├── constants.js        # Constants for images, titles, and artists
-├── left.png            # Left arrow image
-├── right.png           # Right arrow image
 ├── package.json        # Project dependencies and scripts
 ```
