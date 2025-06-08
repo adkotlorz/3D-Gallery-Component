@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Reflector } from 'three/examples/jsm/Addons';
 import { Tween, Easing, update as updateTween } from 'tween';
-import { images } from "./constants";
+import { artists, images, titles } from "./constants";
 
 
 const scene = new THREE.Scene();
@@ -63,6 +63,7 @@ for (let i = 0; i < count; i++) {
 	);
 	leftArrow.position.set(-1.8, 0, -4);
 	leftArrow.name = `LeftArrow`;
+	leftArrow.userData = (i === count -1) ? 0 : i + 1
 
 	baseNode.add(leftArrow);
 
@@ -72,6 +73,7 @@ for (let i = 0; i < count; i++) {
 	);
 	rightArrow.position.set(1.8, 0, -4);
 	rightArrow.name = `RightArrow`;
+	rightArrow.userData = (i === 0) ? count - 1 : i - 1
 
 	baseNode.add(rightArrow);
 }
@@ -100,13 +102,24 @@ mirror.position.y = -1.1;
 mirror.rotateX(-Math.PI / 2);
 scene.add(mirror);
 
-function rotateGallery(direction) {
+function rotateGallery(direction, newIndex) {
 	const deltaY = (direction * (2 * Math.PI / count));
 
 	new Tween(rootNode.rotation)
 		.to({ y: rootNode.rotation.y + deltaY })
 		.easing(Easing.Quadratic.InOut)
-		.start();
+		.start()
+		.onStart(() => {
+			document.querySelector("#title").style.opacity = 0;
+			document.querySelector("#artist").style.opacity = 0;
+	})
+		.onComplete(() => {
+			document.querySelector("#title").innerText = titles[newIndex];
+			document.querySelector("#artist").innerText = artists[newIndex];
+
+			document.querySelector("#title").style.opacity = 1;
+			document.querySelector("#artist").style.opacity = 1;
+		});
 }
 
 function animate() {
@@ -132,11 +145,17 @@ window.addEventListener('click', (e) => {
 
 	const intersections = raycaster.intersectObject(rootNode, true);
 	if (intersections.length > 0) {
+		const obj = intersections[0].object
+		const newIndex = obj.userData;
+
 		if (intersections[0].object.name === "LeftArrow") {
-			rotateGallery(-1)
+			rotateGallery(-1, newIndex);
 		}
 		if (intersections[0].object.name === "RightArrow") {
-			rotateGallery(1)
+			rotateGallery(1, newIndex);
 		}
 	}
 });
+
+document.querySelector("#title").innerText = titles[0];
+document.querySelector("#artist").innerText = artists[0];

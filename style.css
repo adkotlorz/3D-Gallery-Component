@@ -18,7 +18,7 @@ h2 {
 
 #title {
   position: fixed;
-  font-size: 6rem;
+  font-size: 4rem;
   top: 0.5rem;
 }
 
@@ -26,5 +26,5 @@ h2 {
   position: fixed;
   font-size: 3rem;
   color: #808080FF;
-  top: 4rem;
+  top: 7rem;
 }
