@@ -61,9 +61,14 @@ scene.add(spotlight.target);
 const mirror = new Reflector(
 	new THREE.CircleGeometry(10),
 	{
-
+		color: 0X303030,
+		textureWidth: window.innerWidth,
+		textureHeight: window.innerHeight,
 	}
-)
+);
+mirror.position.y = -1.1;
+mirror.rotateX(-Math.PI / 2);
+scene.add(mirror);
 
 function animate() {
 	rootNode.rotation.y += 0.002;
@@ -74,4 +79,5 @@ window.addEventListener('resize', () => {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
+	mirror.getRenderTarget().setSize( window.innerWidth, window.innerHeight );
 });
