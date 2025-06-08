@@ -8,6 +8,17 @@ const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.inner
 
 const textureLoader = new THREE.TextureLoader();
 
+const leftArrowTexture = textureLoader.load(
+	"left.png",
+	() => console.log("Loaded left arrow"),
+	undefined,
+	(err) => console.error("Error while loading left arrow", err));
+const rightArrowTexture = textureLoader.load(
+	"right.png",
+	() => console.log("Loaded right arrow"),
+	undefined,
+	(err) => console.error("Error while loading right arrow", err));
+
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setAnimationLoop( animate );
@@ -44,6 +55,22 @@ for (let i = 0; i < count; i++) {
 	);
 	artwork.position.z = -4;
 	baseNode.add(artwork);
+
+	const leftArrow = new THREE.Mesh(
+		new THREE.BoxGeometry( 0.3, 0.3, 0.01 ),
+		new THREE.MeshStandardMaterial({ map: leftArrowTexture, transparent: true }),
+	);
+	leftArrow.position.set(-1.8, 0, -4);
+
+	baseNode.add(leftArrow);
+
+	const rightArrow = new THREE.Mesh(
+		new THREE.BoxGeometry( 0.3, 0.3, 0.01 ),
+		new THREE.MeshStandardMaterial({ map: rightArrowTexture, transparent: true }),
+	);
+	rightArrow.position.set(1.8, 0, -4);
+
+	baseNode.add(rightArrow);
 }
 
 const spotlight = new THREE.SpotLight(
@@ -71,7 +98,6 @@ mirror.rotateX(-Math.PI / 2);
 scene.add(mirror);
 
 function animate() {
-	rootNode.rotation.y += 0.002;
 	renderer.render(scene, camera);
 }
 
