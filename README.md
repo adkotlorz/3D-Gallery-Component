@@ -31,7 +31,7 @@ To run the project locally, follow these steps:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/3d-gallery.git
+   git clone https://github.com/adkotlorz/3d-gallery.git
    cd 3d-gallery
    ```
 
